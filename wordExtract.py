@@ -1,14 +1,24 @@
-#! python3
-# wordExtract.py - Extract words from texts in the current directory
-# compatible with documents ends with .txt, .docx
+''' wordExtract.py - Extract words from texts in bin and return a dictionary
+with keys of words and values of the times the word appears.
 
-import os, glob, re, docx, time
+p.s. Compatible with documents ends with .txt, .docx
 
+
+Typical usage example:
+
+wordList = wordExtract.extract()
+
+'''
+
+import os
+import glob
+import re
+import docx
+import time
 import logging
+
 logging.basicConfig(level = logging.DEBUG, format = ' %(asctime)s - %(levelname)s - %(message)s')
-
 logging.disable(logging.CRITICAL)
-
 
 def cutUp(text):
     text = text.lower()
@@ -76,7 +86,7 @@ def extract():
     print('词语提取成功')
     time.sleep(0.5)
     #print(words)
-    return words
+    return words   #    return a dictionary of words   
 
 if __name__=='__main__':
     extract()
