@@ -1,6 +1,5 @@
-#! python3
-# shelfer.py - to store the vocabulary information into the shelf
-
+''' shelfer.py - Store the vocabulary information into the shelf.
+'''
 import xlrd, shelve, os, sys, time
 
 def work():
@@ -9,7 +8,7 @@ def work():
     elif os.path.exists('.\\data\\dict.dat'):
         print('词库数据已创建')
         time.sleep(0.5)
-        sys.exit(0)
+        return 0
     shelfFile = shelve.open('.\\data\dict')
 
     fname = '.\\source\\' + '高考考纲词汇.xlsx'
