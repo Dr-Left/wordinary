@@ -29,3 +29,7 @@ def work():
     print('词库数据创建成功！')
     time.sleep(0.5)
     shelfFile.close()
+
+
+if __name__ == '__main__':
+    work()

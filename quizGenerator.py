@@ -28,9 +28,8 @@ currentDate = time.strftime("%Y-%m-%d", time.localtime())
 # regex family
 wordRegex = re.compile(r'^[a-zA-Z]+$')  # English words
 chineseRegex = re.compile(r'[\u4e00-\u9fa5]+')  # Chinese characters
-rangeRegex = re.compile(r'[0-9]+\w*[0-9]+') # a range e.g. 1-100
+rangeRegex = re.compile(r'[0-9]+-[0-9]+') # a range e.g. 1-100
 numRegex = re.compile(r'[0-9]+')    # pure integers
-
 
 
 sourceName = ''
@@ -136,10 +135,11 @@ def gen(fname):
             print('无效的输入！')
 
     # ask for the range of words， and put them to head and tail
-    print('请输入本次默写的单词范围（例如：100-199， 最大' + str(rowNum - 1) + '道题目）：')
+    print('请输入本次默写的单词范围（例如：1-100， 最大' + str(rowNum - 1) + '道题目）：')
     while True:
         inp = input()
         mo = rangeRegex.search(inp)
+        #print(mo)
         if mo == None:
             print('无效的输入！请参考例子的格式。')
         else:
@@ -175,7 +175,7 @@ def gen(fname):
                 raise Exception('问题数量大于范围数量！')
             break
         except Exception as exc:
-            print('无效的输入！%s'  % (esc))
+            print('无效的输入！%s'  % (exc))
      
     # read in all the words and its translations
     wordList = {}
