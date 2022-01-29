@@ -1,0 +1,4 @@
+pyinstaller -i .\data\1.ico -F main.py
+
+python D:/myCode/pythonScripts/wordinary_new/source/英语高频词（Modified）.xlsx D:/myCode/pythonScripts/wordinary_new 1 10 0 10
+D:/myCode/pythonScripts/wordinary_new/source/英语高频词（Modified）.xlsx D:/myCode/pythonScripts/wordinary_new 1 1 10 0 10
