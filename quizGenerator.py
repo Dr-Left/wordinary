@@ -99,18 +99,19 @@ def gen(fname, sourceName, binPath, versionCnt, wordRangeBegin, wordRangeEnd, mo
     # get the user need eng to chn or chn to eng
     opt = mode
     questionNum = questionCnt
-    # read in all the words and its translations
-    wordList = {}
-    sampleList = random.sample(range(head, tail + 1), questionNum)
-    for i in sampleList:   # loop all the rows, search for the word
-        key = str(ws.col_values(wordCol)[i])
-        key = ' '.join(key.split())
-        val = str(ws.col_values(transCol)[i])
-        val = ' '.join(val.split())
-        wordList[key] = val  # use a dictionary to storage: key for the word, value for the translation
+    
         
     # do a loop, generate a different quiz for every student
     for i in range(stuNum):
+        # read in all the words and its translations
+        wordList = {}
+        sampleList = random.sample(range(head, tail + 1), questionNum)
+        for wordID in sampleList:   # loop all the rows, search for the word
+            key = str(ws.col_values(wordCol)[wordID])
+            key = ' '.join(key.split())
+            val = str(ws.col_values(transCol)[wordID])
+            val = ' '.join(val.split())
+            wordList[key] = val  # use a dictionary to storage: key for the word, value for the translation
         printQuiz(i, wordList, opt, head, tail, binPath, sourceName, answerOn=False)
         printQuiz(i, wordList, opt, head, tail, binPath, sourceName,answerOn=True)
 
