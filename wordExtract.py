@@ -8,6 +8,8 @@ Typical usage example:
 
 wordList = wordExtract.extract()
 
+arguments: openPath1 openPath2... savePath
+
 '''
 
 import os
@@ -22,6 +24,7 @@ import currentTime
 import codecs
 import shelve
 import shelfer # my own module shelfer.py
+from openpyxl.styles import Font
 
 def output(fname, wordList):
     # generate the shelf of the dictionary in .\data
@@ -39,7 +42,7 @@ def output(fname, wordList):
     shelfFile = shelve.open('.\\data\dict')
     if shelfFile.keys() == []:
         raise Exception('Run shelfer.py first!')
-    for word, num in wordList:
+    for word, num in wordList.items():
         try:
             #Another mode:get from the internet: translation = trans.getTranslation(word)
             if word not in shelfFile.keys():
@@ -57,7 +60,12 @@ def output(fname, wordList):
     ws.column_dimensions['A'].width = 5
     ws.column_dimensions['B'].width = 17
     ws.column_dimensions['C'].width = 90
-    ws.column_dimensions['D'].width = 7    
+    ws.column_dimensions['D'].width = 7
+    # set the font
+    myFont = Font(name="Times New Roman", size=11)
+    for i in range(len(wordList) + 1):
+        for j in range(4):
+            ws.cell(i + 1, j + 1).font = myFont # cell 是从1开始
     #save
     wb.save(fname)
     print(os.path.abspath(fname))
@@ -111,7 +119,7 @@ def extract(openPath, savePath):
                 words.setdefault(wd, 0)
                 words[wd] += 1    
    
-    words = sorted(words.items())
+    #words = sorted(words.items())
     #print('词语提取成功')
     #print(words)
     #time.sleep(0.5)

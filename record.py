@@ -5,9 +5,10 @@
 
 '''
     命令行参数sample：
-    python record.py "./wordListSample.xlsx"    "./"      2               1000
-                      sourceFilePath          binPath    repetition   interval(ms)
+    python record.py "./wordListSample.xlsx"    "./"      2               1000      1            10
+                      sourceFilePath          binPath    repetition   interval(ms)  wordRangeBegin    wordRangeEnd
 '''
+
 
 from pydub import AudioSegment
 from pyquery import PyQuery as pq
@@ -16,12 +17,16 @@ import os
 import time
 import requests
 import sys
+import xlrd
+import re
 
 sourceFilePath = sys.argv[1]
 binPath = sys.argv[2]
 repetition = int(sys.argv[3])
 interval = int(sys.argv[4])
 fileName = os.path.basename(sourceFilePath).split('.')[0]
+wordRangeBegin = int(sys.argv[5])
+wordRangeEnd = int(sys.argv[6])
 
 def main():
     if not os.path.exists(binPath):
@@ -43,7 +48,7 @@ def get_wordList():
                 word = line.strip() # 去除首尾空格
                 wordList.append(word)
     if sourceFilePath.endswith(".xlsx") or sourceFilePath.endswith(".xls"): # Excel 表格
-        wb = xlrd.open_workbook(fname)
+        wb = xlrd.open_workbook(sourceFilePath)
         ws = wb.sheet_by_index(0)
         # get the available row and column numbers
         rowNum = ws.nrows
@@ -51,7 +56,7 @@ def get_wordList():
         wordCol = -1 # the English row
         # find where the English words are
         for i in range(colNum):
-            for j in range(1,rowNum):
+            for j in range(1, rowNum):
                 val = str(ws.col_values(i)[j])
                 val = ''.join(val.split())
                 wordRegex = re.compile(r'^[a-zA-Z]+$')  # English words
@@ -62,8 +67,8 @@ def get_wordList():
                 break
         if wordCol == -1:
             raise Exception('Word no find.')
-        for i in range(colNum):
-            word = ''.join(str(ws.col_values(i)[j]).split())
+        for j in range(wordRangeBegin, wordRangeEnd + 1):  # xlsx begins form 0, but the first row is the title row
+            word = ''.join(str(ws.col_values(wordCol)[j]).split())
             wordList.append(word) 
     return wordList
 
@@ -76,6 +81,7 @@ def look_up_words(wordList):
     song = pause(1000) # 最后输出的音频
     
     for word in wordList: #遍历单词列表中的每个单词
+        print(word)
         if not os.path.exists(r".\sounds"):
             os.mkdir(r".\sounds")
         target_name = os.path.join(r".\sounds", word + ".mp3")
@@ -92,9 +98,11 @@ def look_up_words(wordList):
                     wget.download(url_mp3, out=target_name)
             except Exception as exc:
                 print(exc)
-        songclip = pause(interval) + AudioSegment.from_file(target_name)
-        song = song + songclip * repetition
-    song.export(binPath + '\\' + fileName + '.wav', format='wav')
+        #songclip = pause(interval) + AudioSegment.from_file(target_name)
+        #song = song + songclip * repetition
+    outputPath = binPath + '\\' + fileName + '.wav'
+    song.export(outputPath, format='wav')
+    print(outputPath)
 
 def pause(time):
     return AudioSegment.silent(duration=time)

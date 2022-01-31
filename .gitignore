@@ -1,4 +1,5 @@
-./dist
-./build
-./__pycache__
+dist/
+build/
+__pycache__/
 *.xlsx
+sounds/
