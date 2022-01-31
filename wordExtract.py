@@ -8,7 +8,7 @@ Typical usage example:
 
 wordList = wordExtract.extract()
 
-arguments: openPath1 openPath2... savePath
+arguments: <openPath1> <savePath> [basisPath]
 
 '''
 
@@ -26,9 +26,11 @@ import shelve
 import shelfer # my own module shelfer.py
 from openpyxl.styles import Font
 
+basisPath = ""
+
 def output(fname, wordList):
     # generate the shelf of the dictionary in .\data
-    shelfer.work()
+    shelfer.work(basisPath) # if the GUI not send it, it remains blank
     #create an excel file
     wb = openpyxl.Workbook()    # workbook
     ws = wb.active   # worksheet
@@ -88,36 +90,35 @@ def extract(openPath, savePath):
     words = {}
     #print(openPath)
     # for each text, collect the words and the corresponding appearing times
-    
-    for dr in openPath:
-        if (dr.endswith(".txt")):
-            try:
-                myFile = open(dr)
-            except Exception as exc:
-                print('cannot open directory.')
-            try:
-                cont = myFile.read()
-            except Exception as exc:
-                myFile = codecs.open(dr, mode='r', encoding='utf-8')
-                cont = myFile.read()
-            cont = cutUp(cont)
-            wordList = cont.split()
-            for wd in wordList:
-                words.setdefault(wd, 0)
-                words[wd] += 1
-        elif (dr.endswith(".doc") or dr.endswith(".docx")):
-            try:
-                myFile = docx.Document(dr)
-            except Exception as exc:
-                print('cannot open directory.')
-            cont = ''
-            for paragraph in myFile.paragraphs:
-                cont += paragraph.text
-            cont = cutUp(cont)
-            wordList = cont.split()
-            for wd in wordList:
-                words.setdefault(wd, 0)
-                words[wd] += 1    
+    dr = openPath
+    if (dr.endswith(".txt")):
+        try:
+            myFile = open(dr)
+        except Exception as exc:
+            print('cannot open directory.')
+        try:
+            cont = myFile.read()
+        except Exception as exc:
+            myFile = codecs.open(dr, mode='r', encoding='utf-8')
+            cont = myFile.read()
+        cont = cutUp(cont)
+        wordList = cont.split()
+        for wd in wordList:
+            words.setdefault(wd, 0)
+            words[wd] += 1
+    elif (dr.endswith(".doc") or dr.endswith(".docx")):
+        try:
+            myFile = docx.Document(dr)
+        except Exception as exc:
+            print('cannot open directory.')
+        cont = ''
+        for paragraph in myFile.paragraphs:
+            cont += paragraph.text
+        cont = cutUp(cont)
+        wordList = cont.split()
+        for wd in wordList:
+            words.setdefault(wd, 0)
+            words[wd] += 1    
    
     #words = sorted(words.items())
     #print('词语提取成功')
@@ -129,8 +130,11 @@ def extract(openPath, savePath):
 if __name__=='__main__':
     if len(sys.argv) < 3:
         sys.exit(-1)
-    openPath = sys.argv[1 : len(sys.argv) - 1] # a list
-    savePath = sys.argv[len(sys.argv) - 1]
+    openPath = sys.argv[1]
+    savePath = sys.argv[2]
+    if len(sys.argv) > 3:
+        global basisPath
+        basisPath = sys.argv[3]
     words = extract(openPath, savePath)
     output(savePath, words)
 
