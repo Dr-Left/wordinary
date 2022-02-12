@@ -31,9 +31,9 @@ def work(fname):
             colNum = ws.ncols
             wordCol, transCol = whereAreWordsAndTranslations(ws)
             for i in range(1, rowNum):
-                word = ws.cell_value(i, wordCol)
+                word = str(ws.cell_value(i, wordCol))
                 word = ''.join(word.split())
-                translation = ws.cell_value(i, transCol)
+                translation = str(ws.cell_value(i, transCol))
                 translation = ''.join(translation.split())
                 shelfFile[word] = translation
             print('词库数据创建成功！')

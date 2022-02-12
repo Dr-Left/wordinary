@@ -1,0 +1,1 @@
+pyinstaller wordExtract.py -F --exclude-module="numpy"

@@ -133,7 +133,6 @@ if __name__=='__main__':
     openPath = sys.argv[1]
     savePath = sys.argv[2]
     if len(sys.argv) > 3:
-        global basisPath
         basisPath = sys.argv[3]
     words = extract(openPath, savePath)
     output(savePath, words)
