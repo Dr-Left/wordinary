@@ -34,18 +34,21 @@ def work(fname):
             rowNum = ws.nrows
             colNum = ws.ncols
             wordCol, transCol, start_row = whereAreWordsAndTranslations(ws)
-            print(
-                "English words are in column %d, translations are in column %d."
-                % (wordCol, transCol)
-            )
-            print("The first row is %d." % start_row)
+            # print(
+            #     "English words are in column %d, translations are in column %d."
+            #     % (wordCol, transCol)
+            # )
+            # print("The first row is %d." % start_row)
+            word_dict = {}
             for i in range(start_row, rowNum):
                 word = str(ws.cell_value(i, wordCol))
                 word = "".join(word.split())
                 translation = str(ws.cell_value(i, transCol))
                 translation = "".join(translation.split())
-                shelfFile[word] = translation
+                # shelfFile[word] = translation
+                word_dict[word] = translation
             print("词库数据创建成功！")
+            shelfFile["dict"] = word_dict
             shelfFile.close()
 
 

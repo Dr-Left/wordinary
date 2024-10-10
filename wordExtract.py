@@ -47,12 +47,13 @@ def output(fname, wordList):
     shelfFile = shelve.open(".\\data\dict")
     if shelfFile.keys() == []:
         raise Exception("Run shelfer.py first!")
+    word_dict = shelfFile["dict"]
     for word, num in wordList.items():
         try:
             # Another mode:get from the internet: translation = trans.getTranslation(word)
-            if word not in shelfFile.keys():
+            if word not in word_dict.keys():
                 continue
-            translation = shelfFile[word]
+            translation = word_dict[word]
             line += 1
             ws["A" + str(line)] = line - 1
             ws["B" + str(line)] = word
