@@ -1,6 +1,11 @@
 dist/
 build/
 __pycache__/
-*.xlsx
+*.xls*
+*.doc*
 *.wav
 sounds/
+.idea/
+*.bak
+*.dat
+*.dir
